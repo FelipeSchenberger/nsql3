@@ -4,14 +4,15 @@ services:
   frontend:
     build: ./frontend
     ports:
-      - "3000:3000"
+      - "5173:5173"
     depends_on:
       - backend
     environment:
       - NODE_ENV=development
-      - PORT=3000
+      # - PORT=3000
     volumes:
       - ./frontend:/app
+      - /app/node_modules
     networks:
       - app-network
   
@@ -27,6 +28,7 @@ services:
       - MONGO_URI=mongodb://mongo:27017/mydatabase
     volumes:
       - ./backend:/app
+      - /app/node_modules
     networks:
       - app-network
   
