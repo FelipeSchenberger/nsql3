@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/AgregarCharacter.css';
 
 const AgregarCharacter = () => {
@@ -8,8 +8,9 @@ const AgregarCharacter = () => {
   const [year, setYear] = useState('');
   const [description, setDescription] = useState('');
   const [equipment, setEquipment] = useState('');
-  const [images, setImages] = useState('');
-  const [imgSrc, setImgSrc] = useState('/assets/default.png');
+  const [images, setImages] = useState(['/assets/default.png']);
+  const [logoActual, setLogoActual] = useState('/assets/default2.png');
+  const [imagenActual, setImagenActual] = useState(0);
 
   const formatearNombre = (nombre) => {
     if (!nombre) return '';
@@ -20,35 +21,87 @@ const AgregarCharacter = () => {
       .replace(/ /g, '_');
   };
 
+  const actualizarLogo = (nombre) => {
+    const base = formatearNombre(nombre);
+    const nuevoLogo = `/assets/${base}.png`;
+
+    const img = new Image();
+    img.src = nuevoLogo;
+    img.onload = () => setLogoActual(nuevoLogo);
+    img.onerror = () => setLogoActual('/assets/default2.png');
+  };
+
+  const cargarImagenes = (nombre) => {
+    const base = formatearNombre(nombre);
+    const nuevas = [];
+
+    for (let i = 1; i <= 3; i++) {
+      nuevas.push(`/assets/${base}${i}.png`);
+    }
+
+    const promesas = nuevas.map((src) => new Promise((resolve) => {
+      const img = new Image();
+      img.src = src;
+      img.onload = () => resolve(src);
+      img.onerror = () => resolve(null);
+    }));
+
+    Promise.all(promesas).then((resultados) => {
+      const filtradas = resultados.filter((src) => src !== null);
+      setImages(filtradas.length > 0 ? filtradas : ['/assets/default.png']);
+    });
+  };
+
   const handleCharacterChange = (e) => {
     const value = e.target.value;
     setCharacter(value);
-    const formatted = formatearNombre(value);
-    if (formatted.length >= 3) {
-      setImgSrc(`/assets/${formatted}.png`);
+
+    if (value.length >= 3) {
+      cargarImagenes(value);
+      actualizarLogo(value);
     } else {
-      setImgSrc('/assets/default.png');
+      setImages(['/assets/default.png']);
+      setLogoActual('/assets/default2.png');
     }
   };
 
-  const handleImgError = () => {
-    setImgSrc('/assets/default.png');
+  const siguienteImagen = () => {
+    setImagenActual((prev) => (prev + 1) % images.length);
   };
 
+  const anteriorImagen = () => {
+    setImagenActual((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  useEffect(() => {
+    if (images.length > 1) {
+      const interval = setInterval(() => {
+        siguienteImagen();
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [images]);
+
+  useEffect(() => {
+    setImagenActual(0);
+  }, [images]);
+
   return (
-    <div className="agregar-character-container" style={{ display: 'flex', minHeight: '60vh' }}>
-      {/* Izquierda: Imagen */}
-      <div className="agregar-character-img" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f5f5' }}>
-        <img
-          src={imgSrc}
+    <div className="agregar-character-container">
+      <div className="agregar-character-img" >
+        {images.length > 1 && (
+          <button onClick={anteriorImagen}>&lt;</button>
+        )}
+        <img className='img-character'
+          src={images[imagenActual]}
           alt={character || 'default'}
-          style={{ maxWidth: '80%', maxHeight: '400px', objectFit: 'contain', borderRadius: '12px', boxShadow: '0 2px 8px #0002' }}
-          onError={handleImgError}
         />
+        {images.length > 1 && (
+          <button className='boton-img-right' onClick={siguienteImagen}>&gt;</button>
+        )}
       </div>
 
-      {/* Derecha: Formulario */}
-      <div className="agregar-character-form" style={{ flex: 1, padding: '2rem' }}>
+      <div className="agregar-character-form">
         <h1 className="title-agregar">Agregar Personaje</h1>
         <form className="form-agregar" onSubmit={(e) => {
           e.preventDefault();
@@ -59,7 +112,7 @@ const AgregarCharacter = () => {
             year,
             description,
             equipment,
-            images
+            images: images.join(',')
           };
 
           fetch('http://localhost:5000/api/heroes', {
@@ -69,18 +122,22 @@ const AgregarCharacter = () => {
             },
             body: JSON.stringify(newCharacter)
           })
-            .then(res => res.json())
-            .then(data => {
-              console.log('Personaje agregado:', data)
+            .then((res) => res.json())
+            .then((data) => {
+              console.log('Personaje agregado:', data);
             })
-            .catch(err => {
-              console.error('Error:', err)
-            })
+            .catch((err) => {
+              console.error('Error:', err);
+            });
         }}>
           <input
             type="text"
             placeholder="Personaje"
             onChange={handleCharacterChange}
+          />
+          <img className='logo-character'
+            src={logoActual}
+            alt={character}
           />
           <input
             type="text"
@@ -112,6 +169,6 @@ const AgregarCharacter = () => {
       </div>
     </div>
   );
-}
+};
 
 export default AgregarCharacter;
