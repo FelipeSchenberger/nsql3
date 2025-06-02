@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import SuccessMessage from "../components/SuccessMessage";
+import ErrorMessage from '../components/ErrorMessage';
 import '../styles/AgregarCharacter.css';
+import { useNavigate } from 'react-router-dom';
 
 const AgregarCharacter = () => {
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
   const [character, setCharacter] = useState('');
   const [name, setName] = useState('');
   const [universe, setUniverse] = useState('');
@@ -10,11 +15,22 @@ const AgregarCharacter = () => {
   const [equipment, setEquipment] = useState('');
   const [images, setImages] = useState(['/assets/default.png']);
   const [logoActual, setLogoActual] = useState('/assets/default2.png');
+  const [universeLogo, setUniverseLogo] = useState('/assets/default2.png');
   const [imagenActual, setImagenActual] = useState(0);
+  const navigate = useNavigate();
 
   const formatearNombre = (nombre) => {
     if (!nombre) return '';
     return nombre
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/ /g, '_');
+  };
+
+  const formatearUniverse = (universe) => {
+    if (!universe) return '';
+    return universe
       .toLowerCase()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
@@ -29,6 +45,15 @@ const AgregarCharacter = () => {
     img.src = nuevoLogo;
     img.onload = () => setLogoActual(nuevoLogo);
     img.onerror = () => setLogoActual('/assets/default2.png');
+  };
+
+  const actualizarLogoUniverso = (universe) => {
+    const base = formatearUniverse(universe);
+    const universoLogo = `/assets/${base}.png`;
+    const img = new Image();
+    img.src = universoLogo;
+    img.onload = () => setUniverseLogo(universoLogo);
+    img.onerror = () => setUniverseLogo('/assets/default2.png');
   };
 
   const cargarImagenes = (nombre) => {
@@ -59,10 +84,18 @@ const AgregarCharacter = () => {
     if (value.length >= 3) {
       cargarImagenes(value);
       actualizarLogo(value);
+      actualizarLogoUniverso(value);
     } else {
       setImages(['/assets/default.png']);
       setLogoActual('/assets/default2.png');
+      setUniverseLogo('/assets/default2.png');
     }
+  };
+
+  const handleUniverseChange = (e) => {
+    const value = e.target.value;
+    setUniverse(value);
+    actualizarLogoUniverso(value);
   };
 
   const siguienteImagen = () => {
@@ -86,9 +119,60 @@ const AgregarCharacter = () => {
     setImagenActual(0);
   }, [images]);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Validación de campos obligatorios
+    if (!character || !universe || !year || !description || !equipment) {
+      setShowError(true); // Mostrar animación de error
+      setTimeout(() => {
+        setShowError(false);
+      }, 3000); // Ocultar animación después de 3 segundos
+      console.error('Todos los campos obligatorios deben estar completos.');
+      return; // Detener el envío del formulario
+    }
+
+    const formattedUniverse = formatearUniverse(universe);
+    const newCharacter = {
+      character,
+      name, // Este campo puede estar vacío
+      universe: formattedUniverse,
+      year,
+      description,
+      equipment,
+      images: images.join(',')
+    };
+
+    fetch('http://localhost:5000/api/heroes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newCharacter)
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log('Personaje agregado:', data);
+        setShowSuccess(true); // Mostrar animación de éxito
+        setTimeout(() => {
+          setShowSuccess(false);
+          navigate('/');
+        }, 3000);
+      })
+      .catch((err) => {
+        console.error('Error:', err);
+        setShowError(true); // Mostrar animación de error
+        setTimeout(() => {
+          setShowError(false);
+        }, 3000); // Ocultar animación después de 3 segundos
+      });
+  };
+
   return (
     <div className="agregar-character-container">
-      <div className="agregar-character-img" >
+      {showSuccess && <SuccessMessage showVideo={showSuccess} onClose={() => setShowSuccess(false)} />}
+      {showError && <ErrorMessage showVideo={showError} onClose={() => setShowError(false)} />} {/* Mostrar animación de error */}
+      <div className="agregar-character-img">
         {images.length > 1 && (
           <button onClick={anteriorImagen}>&lt;</button>
         )}
@@ -103,34 +187,8 @@ const AgregarCharacter = () => {
 
       <div className="agregar-character-form">
         <h1 className="title-agregar">Agregar Personaje</h1>
-        <form className="form-agregar" onSubmit={(e) => {
-          e.preventDefault();
-          const newCharacter = {
-            character,
-            name,
-            universe,
-            year,
-            description,
-            equipment,
-            images: images.join(',')
-          };
-
-          fetch('http://localhost:5000/api/heroes', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newCharacter)
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              console.log('Personaje agregado:', data);
-            })
-            .catch((err) => {
-              console.error('Error:', err);
-            });
-        }}>
-          <input
+        <form className="form-agregar" onSubmit={handleSubmit}>
+          <input className='input-character'
             type="text"
             placeholder="Personaje"
             onChange={handleCharacterChange}
@@ -139,32 +197,38 @@ const AgregarCharacter = () => {
             src={logoActual}
             alt={character}
           />
-          <input
+          <input className='input-character'
             type="text"
             placeholder="Nombre"
             onChange={(e) => setName(e.target.value)}
           />
           <input
+            className='input-character'
             type="text"
             placeholder="Universo"
-            onChange={(e) => setUniverse(e.target.value)}
+            onChange={handleUniverseChange}
           />
-          <input
+          <img className='logo-universe'
+            src={universeLogo}
+            alt={universe}
+          />
+          <input className='input-character'
             type="text"
             placeholder="Año"
             onChange={(e) => setYear(e.target.value)}
           />
-          <input
+          <input className='input-character'
             type="text"
             placeholder="Descripción"
             onChange={(e) => setDescription(e.target.value)}
           />
-          <input
+          <input className='input-character'
             type="text"
+            
             placeholder="Equipo"
             onChange={(e) => setEquipment(e.target.value)}
           />
-          <button type="submit">Agregar</button>
+          <button className="button-agregar" type="submit">Agregar</button>
         </form>
       </div>
     </div>

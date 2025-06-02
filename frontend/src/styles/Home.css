@@ -1,104 +1,24 @@
-/* .home-container {
-    margin-bottom: -150px;
-    max-width: 1200px;
-    margin: 100px auto;
-    padding: 20px;
-    background-color: #f4f4f4;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.home-title {
-    font-size: 2.5rem;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.heros-cards-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px;
-}
-
-.hero-card {
-    background-color: #fff;
-    border-radius: 10px;
-    padding: 50px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.hero-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-.img-card {
-    height: 280px;
-    border-radius: 10px;
-    object-fit: cover;
-    margin-bottom: 10px;
-}
-
-.title-card {
-    color: #333;
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin: 10px 0;
-}
-
-.name-card {
-    color: #666;
-    font-size: 1.2rem;
-    margin: 5px 0;
-}
-
-.description-card {
-    color: #888;
-    font-size: 1rem;
-    margin: 5px 0;
-}
-
-.button-card {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-    margin-top: 10px;
-}
-
-.button-card:hover {
-    background-color: #0056b3;
-}
- */
-
- .home-container {
-  max-width: 1200px;
+.home-container {
+  width: 100%;
   margin: 0 auto;
   padding: 20px;
-  background-color: #f4f4f4;
+  background-color: #b7c47400;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .home-title {
   font-size: 2.5rem;
   font-weight: bold;
   text-align: center;
+  margin-top: 120px;
   margin-bottom: 20px;
-  color: #333;
+  color: #ffffff;
 }
 
 .heros-cards-container {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  justify-content: center;
   gap: 20px;
   padding: 20px;
 }
@@ -110,7 +30,20 @@
   text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
-  height: 350px; /* Tamaño fijo para todas las tarjetas */
+  width: 240px;
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0 auto;
+}
+
+
+.no-heroes {
+  text-align: center;
+  color: #b7b6b6;
+  font-size: 1.2rem;
+  margin-top: 50px;
 }
 
 .hero-card:hover {
@@ -120,11 +53,13 @@
 
 .img-card {
   width: 100%;
-  height: 150px; /* Tamaño fijo para las imágenes */
+  height: 230px;
+  object-fit: contain;
   border-radius: 10px;
-  object-fit: cover;
   margin-bottom: 10px;
+  background-color: #f0f0f0;
 }
+
 
 .title-card {
   color: #333;
@@ -143,10 +78,14 @@
   color: #888;
   font-size: 1rem;
   margin: 5px 0;
-  overflow: hidden; /* Oculta el texto que excede el contenedor */
-  white-space: nowrap; /* Mantiene el texto en una sola línea */
-  text-overflow: ellipsis; /* Agrega "..." al final del texto si es demasiado largo */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
+
 
 .button-card {
   background-color: #007bff;

@@ -1,7 +1,7 @@
 import React from "react";
 import '../styles/Navbar.css';
-import Marvel_Logo from '../assets/Marvel_Logo.svg';
-import DC_Logo from '../assets/dc2.png';
+import Marvel_Logo from '../assets/marvel.svg';
+import DC_Logo from '../assets/dc.png';
 
 function Navbar() {
     return (

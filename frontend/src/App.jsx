@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import AgregarCharacter from './pages/AgregarCharacter';
+import UpdateCharacter from './pages/UpdateCharacter';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
             <Route path="/agregar" element={<AgregarCharacter />} />
             <Route path="/marvel" element={<Home />} />
             <Route path="/dc" element={<Home />} />
+            <Route path="/detalle/:id" element={<UpdateCharacter />} />
           </Routes>
         </main>
       </BrowserRouter>

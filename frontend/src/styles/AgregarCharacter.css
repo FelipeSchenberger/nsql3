@@ -1,6 +1,7 @@
 .agregar-character-container {
   display: flex; 
   Height: 60vh;
+  margin-top: 200px;
 }
 
 .agregar-character-img {
@@ -13,6 +14,7 @@
 
 .title-agregar {
   color: white;
+  margin-top: -100px;
   font-size: 30px;
   margin-left: 20px;
   margin-right: 20px;
@@ -30,11 +32,20 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 30px;
+  row-gap: 7px;
 }
 
 .logo-character {
-  Height: 120px
+  Height: 120px;
+  margin-top: -10px;
+}
+
+.logo-universe {
+  margin-bottom: 10px;
+  height: 100px;
+  top: 10px;
+  left: 10px;
 }
 
 .agregar-character-form {
@@ -50,4 +61,64 @@
 .boton.img-left {
   position: absolute;
   left: 10;
+}
+
+.input-character {
+  width: 60%;
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.button-agregar {
+  width: 25%;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #4a9a12;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button-agregar:hover {
+  background-color: #3e7f0f;
+}
+
+.button-update {
+  width: 25%;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #f2e82d;
+  color: rgb(9, 8, 8);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button-update:hover {
+  background-color: #c4c11e;
+}
+
+.button-delete {
+  width: 25%;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #d11a2a;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.button-delete:hover {
+  background-color: #a10f1f;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  width: 60%;
+  gap: 40px;
 }
