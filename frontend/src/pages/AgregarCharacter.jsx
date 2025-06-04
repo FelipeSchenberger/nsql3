@@ -122,20 +122,19 @@ const AgregarCharacter = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validación de campos obligatorios
     if (!character || !universe || !year || !description || !equipment) {
-      setShowError(true); // Mostrar animación de error
+      setShowError(true);
       setTimeout(() => {
         setShowError(false);
-      }, 3000); // Ocultar animación después de 3 segundos
+      }, 3000); 
       console.error('Todos los campos obligatorios deben estar completos.');
-      return; // Detener el envío del formulario
+      return; 
     }
 
     const formattedUniverse = formatearUniverse(universe);
     const newCharacter = {
       character,
-      name, // Este campo puede estar vacío
+      name, 
       universe: formattedUniverse,
       year,
       description,
@@ -153,7 +152,7 @@ const AgregarCharacter = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log('Personaje agregado:', data);
-        setShowSuccess(true); // Mostrar animación de éxito
+        setShowSuccess(true);
         setTimeout(() => {
           setShowSuccess(false);
           navigate('/');
@@ -161,17 +160,17 @@ const AgregarCharacter = () => {
       })
       .catch((err) => {
         console.error('Error:', err);
-        setShowError(true); // Mostrar animación de error
+        setShowError(true);
         setTimeout(() => {
           setShowError(false);
-        }, 3000); // Ocultar animación después de 3 segundos
+        }, 3000);
       });
   };
 
   return (
     <div className="agregar-character-container">
       {showSuccess && <SuccessMessage showVideo={showSuccess} onClose={() => setShowSuccess(false)} />}
-      {showError && <ErrorMessage showVideo={showError} onClose={() => setShowError(false)} />} {/* Mostrar animación de error */}
+      {showError && <ErrorMessage showVideo={showError} onClose={() => setShowError(false)} />} 
       <div className="agregar-character-img">
         {images.length > 1 && (
           <button onClick={anteriorImagen}>&lt;</button>

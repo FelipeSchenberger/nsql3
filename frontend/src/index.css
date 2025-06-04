@@ -26,7 +26,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  display: block; /* o flex-direction: column si querés usar flex igual */
+  display: block;
   background-color: #242424;
 }
 

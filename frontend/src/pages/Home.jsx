@@ -29,7 +29,6 @@ function Home() {
         <div className='heros-cards-container'>
           {heroes.map((hero) => (
             <div key={hero._id} className="hero-card">
-              {/* <img className='img-card' src={hero.images.split(',')[0]} alt={hero.character} /> */}
               <img
                 className='img-card'
                 src={hero.images ? hero.images.split(',')[0] : 'ruta-a-imagen-default.jpg'}

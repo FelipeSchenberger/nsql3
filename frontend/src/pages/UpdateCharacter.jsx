@@ -7,7 +7,7 @@ import '../styles/AgregarCharacter.css';
 const UpdateCharacter = () => {
   const { id } = useParams();
   const [showSuccess, setShowSuccess] = useState(false);
-  const [showError, setShowError] = useState(false); // Estado para la animación de error
+  const [showError, setShowError] = useState(false); 
   const [character, setCharacter] = useState('');
   const [name, setName] = useState('');
   const [universe, setUniverse] = useState('');
@@ -87,7 +87,7 @@ const UpdateCharacter = () => {
       year,
       description,
       equipment,
-      images: images.join(',') // Convierte el array de imágenes en una cadena separada por comas
+      images: images.join(',')
     };
 
     fetch(`http://localhost:5000/api/heroes/${id}`, {
@@ -108,8 +108,8 @@ const UpdateCharacter = () => {
       })
       .catch((err) => {
         console.error('Error al actualizar el personaje:', err);
-        setShowError(true); // Mostrar animación de error
-        setTimeout(() => setShowError(false), 3000); // Ocultar animación después de 3 segundos
+        setShowError(true);
+        setTimeout(() => setShowError(false), 3000); 
       });
   };
 
@@ -130,15 +130,15 @@ const UpdateCharacter = () => {
       })
       .catch((err) => {
         console.error('Error al eliminar el personaje:', err);
-        setShowError(true); // Mostrar animación de error
-        setTimeout(() => setShowError(false), 3000); // Ocultar animación después de 3 segundos
+        setShowError(true); 
+        setTimeout(() => setShowError(false), 3000);
       });
   };
 
   return (
     <div className="agregar-character-container">
       {showSuccess && <SuccessMessage showVideo={showSuccess} onClose={() => setShowSuccess(false)} />}
-      {showError && <ErrorMessage showVideo={showError} onClose={() => setShowError(false)} />} {/* Mostrar animación de error */}
+      {showError && <ErrorMessage showVideo={showError} onClose={() => setShowError(false)} />} 
       <div className="agregar-character-img">
         <img className='img-character' src={images[0]} alt={character || 'default'} />
       </div>
