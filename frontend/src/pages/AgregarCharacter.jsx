@@ -49,7 +49,7 @@ const AgregarCharacter = () => {
 
   const actualizarLogoUniverso = (universe) => {
     const base = formatearUniverse(universe);
-    const universoLogo = `/assets/${base}.png`;
+    const universoLogo = `/assets/${base}logo.png`;
     const img = new Image();
     img.src = universoLogo;
     img.onload = () => setUniverseLogo(universoLogo);
